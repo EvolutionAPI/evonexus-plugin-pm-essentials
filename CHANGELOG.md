@@ -2,6 +2,40 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.6] — 2026-04-24
+
+Plugin promoted to **reference implementation** of the EvoNexus v1a plugin
+contract. Exercises every supported capability so community plugin authors
+can copy this repo as their starting template.
+
+### Added
+
+- **Two new skills**: `project-health` (surface blockers/overdue/stale tasks
+  across active projects) and `stakeholder-update` (≤ 150-word status block
+  adapted by audience — leadership/team/investors).
+- **Second slash command**: `/pm-status` chains `project-health` +
+  `stakeholder-update` in one pass.
+- **Second dashboard widget**: `pm-sprint-burndown` — stacked bar of task
+  counts per status in the active sprint, mounted on `/overview`.
+- **Third readonly query**: `sprint_burndown` — counts by status for the
+  active sprint, feeds the new widget.
+- **`migrations/uninstall.sql`**: explicit DROP of all three tables. Without
+  it, the host would leave SQL state behind on delete.
+- **Seed data in `install.sql`**: 3 projects, 1 active sprint, 8 tasks. The
+  first install now has something for the widgets to render and the agent
+  to reason about, instead of staring at an empty dashboard.
+- **Rewrote `README.md`** as the reference guide: capability table, repo
+  layout, install map, required conventions, step-by-step for forking this
+  repo into your own plugin.
+
+### Changed
+
+- **`agents/pm-nova.md`** body extended to reference the three skills by
+  name and wire the data sources explicitly. Persona is now stronger and
+  more likely to override the claude_code preset.
+- **`plugin.yaml`** manifest reorganised with inline comments explaining
+  each field, intended as documentation for plugin authors.
+
 ## [0.1.5] — 2026-04-24
 
 ### Fixed

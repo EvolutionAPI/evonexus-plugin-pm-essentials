@@ -1,10 +1,12 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.1.5
+version: 0.1.6
 description: >
-  Project management essentials for EvoNexus — adds a Nova-style PM agent,
-  sprint planning skill, open-projects widget, and read-only SQL queries for
-  project and task data.
+  Reference plugin for EvoNexus — exercises every v1a capability so plugin
+  authors can copy it as a starting template. Installs a PM-focused agent,
+  three skills, two slash commands, a rule block, SQL schema with seed
+  data, two dashboard widgets, three read-only queries, one heartbeat,
+  one scheduled routine, and a Stop-event Claude Code hook handler.
 author: Evolution Foundation
 license: MIT
 homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
@@ -12,6 +14,9 @@ homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
 min_evonexus_version: 0.30.0
 tier: essential
 
+# All eight v1a capabilities. Declare only what the plugin actually ships so
+# the install preview can warn the user about missing env vars, dependencies,
+# or disk cost before anything is written.
 capabilities:
   - agents
   - skills
@@ -22,13 +27,21 @@ capabilities:
   - claude_hooks
   - readonly_data
 
+# Declare env vars the plugin reads at runtime. Missing vars are a WARNING
+# (not a blocker) on install preview — see AC26 in the EvoNexus PRD.
 env_vars_needed: []
-  # No external API keys required for the base feature set.
 
+# Slugs this plugin refuses to coexist with. Use when two plugins would
+# clobber the same SQL table, widget mount_point, or hook handler path.
 conflicts: {}
 
+# Minimum versions of other plugins this one depends on. Empty for a
+# standalone plugin.
 dependencies: {}
 
+# Dashboard widgets. `mount_point: overview` places the widget on the home
+# dashboard. `custom_element_name` must match the `customElements.define()`
+# call inside the JS bundle or the card renders empty.
 ui_entry_points:
   widgets:
     - id: pm-open-projects
@@ -38,13 +51,28 @@ ui_entry_points:
       filename: pm-open-projects.js
       icon: null
 
+    - id: pm-sprint-burndown
+      label: Sprint Burndown
+      mount_point: overview
+      custom_element_name: pm-sprint-burndown
+      filename: pm-sprint-burndown.js
+      icon: null
+
+# Claude Code hooks. Each entry maps an event (PreToolUse, PostToolUse,
+# Stop, SubagentStop) to a handler script under claude-hook-handlers/.
+# The EvoNexus dispatcher calls the handler and always exits 0 — a failing
+# hook never blocks Claude Code.
 claude_hooks:
   - event: Stop
     handler_path: claude-hook-handlers/on_stop.py
 
+# Declarative read-only queries. The frontend calls
+# GET /api/plugins/pm-essentials/readonly-data/<id> and the backend executes
+# the SQL under a 1000-row cap. Queries must only touch tables prefixed
+# with `{plugin_slug}_` — enforced on install.
 readonly_data:
   - id: open_projects
-    description: Returns all active projects with task counts.
+    description: Active projects with task counts and due dates.
     sql: >
       SELECT
         pm_essentials_projects.id,
@@ -60,7 +88,7 @@ readonly_data:
       ORDER BY pm_essentials_projects.due_date ASC
 
   - id: sprint_tasks
-    description: Returns all tasks in the current sprint.
+    description: Tasks in the current active sprint.
     sql: >
       SELECT
         pm_essentials_tasks.id,
@@ -80,5 +108,26 @@ readonly_data:
           LIMIT 1
         )
       ORDER BY pm_essentials_tasks.priority DESC, pm_essentials_tasks.created_at ASC
+
+  - id: sprint_burndown
+    description: Task counts by status for the active sprint, for the burndown widget.
+    sql: >
+      SELECT status, COUNT(*) AS count
+      FROM pm_essentials_tasks
+      WHERE sprint_id = (
+        SELECT id FROM pm_essentials_sprints
+        WHERE status = 'active'
+        ORDER BY started_at DESC
+        LIMIT 1
+      )
+      GROUP BY status
+      ORDER BY
+        CASE status
+          WHEN 'todo' THEN 1
+          WHEN 'in_progress' THEN 2
+          WHEN 'review' THEN 3
+          WHEN 'done' THEN 4
+          ELSE 5
+        END
 
 source_url: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
