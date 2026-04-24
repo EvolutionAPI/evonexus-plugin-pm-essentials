@@ -2,6 +2,12 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.4] — 2026-04-24
+
+### Changed
+
+- Expanded `agents/pm-nova.md` body with explicit identity reinforcement, scope, tone rules, and example openings. The previous 1.3 KB prompt was too thin to override the Claude Code preset the host injects, so chats were defaulting to the generic "I'm Claude Code" persona. Native EvoNexus agents (Nova, Oracle) ship 20 KB+ prompts — this plugin now matches that standard.
+
 ## [0.1.3] — 2026-04-24
 
 ### Fixed

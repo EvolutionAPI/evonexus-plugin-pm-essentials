@@ -1,6 +1,6 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.1.3
+version: 0.1.4
 description: >
   Project management essentials for EvoNexus — adds a Nova-style PM agent,
   sprint planning skill, open-projects widget, and read-only SQL queries for
