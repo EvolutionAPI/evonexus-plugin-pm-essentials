@@ -2,6 +2,43 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.4.0] — 2026-04-24
+
+Plugin v1 Final — MCP servers (Wave 2.3) + Integrations with env vars (Wave 2.2r)
++ Security scan compliance (Wave 2.5).
+
+### Added
+
+- **Wave 2.3 — MCP server declaration**:
+  - `filesystem-pm` — injects `@modelcontextprotocol/server-filesystem` into
+    `~/.claude.json` under key `plugin-pm-essentials-filesystem-pm`, pointing to
+    `${WORKSPACE}/workspace/project`. Requires `npx` in PATH.
+  - After install/update, a banner prompts you to restart Claude Code CLI to
+    activate the MCP server.
+
+- **Wave 2.2r — Integration: Todoist**:
+  - Declares `TODOIST_PLUGIN_API_KEY` env var under `integrations[].env_vars`.
+  - Appears in `/integrations` → Custom tab as "PM Essentials — Todoist" card
+    with a "via plugin" badge and schema-driven Configure modal (password input,
+    masked display, audit logs keys only).
+  - On uninstall, `# plugin-pm-essentials` section is automatically removed
+    from `.env` (no leaked credentials).
+  - **Note:** `health_check` is intentionally omitted in v0.4.0. The Todoist
+    REST API requires a Bearer Authorization header, which is not yet supported
+    by the v1 `HealthCheckSpec` schema (headers support is a v2 follow-up).
+    Use the manual Test button (available once headers land) to verify
+    connectivity.
+
+- **Wave 2.5 — Security scan compliance**:
+  - All agent/skill markdown reviewed; no prompt injection, dangerous SQL, or
+    shell exec patterns. Scan verdict: `APPROVE`.
+
+### Changed
+
+- `description` expanded to document Wave 2.2r + 2.3 capabilities.
+- `min_evonexus_version` unchanged at `0.30.0` (compatible with current
+  EvoNexus — core will pick up new capabilities on next release).
+
 ## [0.3.1] — 2026-04-24
 
 ### Fixed

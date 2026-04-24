@@ -1,13 +1,15 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.3.1
+version: 0.4.0
 description: >
-  Reference plugin for EvoNexus — exercises every v1a + Wave 2.1 capability so
-  plugin authors can copy it as a starting template. Installs a PM-focused agent,
-  three skills, two slash commands, a rule block, SQL schema with seed data, two
-  dashboard widgets, four full-screen pages (company / projects / kanban / reports),
-  three read-only queries, two writable-data resources, one heartbeat, one scheduled
-  routine, and a Stop-event Claude Code hook handler.
+  Reference plugin for EvoNexus — exercises every v1a + Wave 2.1 + Wave 2.2r +
+  Wave 2.3 capability so plugin authors can copy it as a starting template.
+  Installs a PM-focused agent, three skills, two slash commands, a rule block,
+  SQL schema with seed data, two dashboard widgets, four full-screen pages
+  (company / projects / kanban / reports), three read-only queries, two
+  writable-data resources, one heartbeat, one scheduled routine, one Claude Code
+  hook handler, one MCP server declaration (Wave 2.3), and one integration with
+  env var configuration (Wave 2.2r).
 author: Evolution Foundation
 license: MIT
 homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
@@ -251,3 +253,36 @@ agents:
   - file: "agents/pm-nova.md"
     avatar: "ui/assets/avatars/pm-nova.png"
     avatar_sha256: "fd20ca765309e2856f86d3bd8cbdb6c6c079c96b8f6cf90088a694bb98b7af0f"
+
+# Wave 2.3: MCP servers injected into ~/.claude.json on install.
+# Effective name in claude.json: plugin-pm-essentials-{name}
+# Restart Claude Code CLI after install to activate MCP servers.
+mcp_servers:
+  - name: filesystem-pm
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-filesystem"
+      - "${WORKSPACE}/workspace/project"
+    env: {}
+
+# Wave 2.2r: Integrations — env vars that plugin skills/heartbeats consume.
+# Values are saved to .env under section # plugin-pm-essentials.
+# Configure via /integrations → Custom tab → "PM Essentials — Todoist" card.
+#
+# Note: health_check is intentionally omitted for Todoist in v1.
+# The Todoist REST API requires a Bearer Authorization header which is not
+# yet supported by the v1 http health_check spec (headers support is a v2
+# follow-up). Install, configure TODOIST_PLUGIN_API_KEY, and use the
+# Test button (manual test endpoint) to verify connectivity.
+integrations:
+  - slug: todoist
+    label: "PM Essentials — Todoist"
+    category: productivity
+    env_vars:
+      - name: TODOIST_PLUGIN_API_KEY
+        description: >
+          Personal API token from
+          https://todoist.com/app/settings/integrations/developer
+        required: true
+        secret: true
