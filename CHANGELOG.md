@@ -2,6 +2,12 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.3] — 2026-04-24
+
+### Fixed
+
+- Added `routines/routines.yaml` declaring the `pm-essentials-weekly-status` cron. Without this file, the scheduler never picked up `weekly-status.py` (it's not enough to ship the .py — EvoNexus loads routines from the declarative YAML).
+
 ## [0.1.2] — 2026-04-24
 
 ### Fixed

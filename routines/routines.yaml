@@ -1,0 +1,6 @@
+routines:
+  - name: pm-essentials-weekly-status
+    schedule: "0 9 * * 5"          # Fridays at 09:00
+    script: weekly-status.py
+    description: Generate a weekly Markdown status report for all active PM Essentials projects.
+    enabled: false                  # opt-in: user enables from /scheduler after review
