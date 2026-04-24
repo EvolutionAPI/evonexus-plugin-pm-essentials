@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "name":     { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status":   { "type": "string", "enum": ["active", "on_hold", "completed"] },
+    "due_date": { "type": ["string", "null"] }
+  },
+  "required": ["name", "status"],
+  "additionalProperties": false
+}

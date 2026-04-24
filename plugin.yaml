@@ -1,12 +1,13 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.2.0
+version: 0.3.0
 description: >
-  Reference plugin for EvoNexus — exercises every v1a capability so plugin
-  authors can copy it as a starting template. Installs a PM-focused agent,
-  three skills, two slash commands, a rule block, SQL schema with seed
-  data, two dashboard widgets, three read-only queries, one heartbeat,
-  one scheduled routine, and a Stop-event Claude Code hook handler.
+  Reference plugin for EvoNexus — exercises every v1a + Wave 2.1 capability so
+  plugin authors can copy it as a starting template. Installs a PM-focused agent,
+  three skills, two slash commands, a rule block, SQL schema with seed data, two
+  dashboard widgets, four full-screen pages (company / projects / kanban / reports),
+  three read-only queries, two writable-data resources, one heartbeat, one scheduled
+  routine, and a Stop-event Claude Code hook handler.
 author: Evolution Foundation
 license: MIT
 homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
@@ -14,9 +15,7 @@ homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
 min_evonexus_version: 0.30.0
 tier: essential
 
-# All eight v1a capabilities. Declare only what the plugin actually ships so
-# the install preview can warn the user about missing env vars, dependencies,
-# or disk cost before anything is written.
+# Wave 2.1 adds ui_pages and writable_data capabilities.
 capabilities:
   - agents
   - skills
@@ -31,6 +30,9 @@ capabilities:
   - goals
   - tasks
   - triggers
+  # Wave 2.1: full-screen plugin pages + writable CRUD endpoints
+  - ui_pages
+  - writable_data
 
 # Declare env vars the plugin reads at runtime. Missing vars are a WARNING
 # (not a blocker) on install preview — see AC26 in the EvoNexus PRD.
@@ -62,6 +64,108 @@ ui_entry_points:
       custom_element_name: pm-sprint-burndown
       filename: pm-sprint-burndown.js
       icon: null
+
+  # Wave 2.1: full-screen pages — served by /plugins/pm-essentials/ui/pages/*.js
+  # Route: /plugins-ui/pm-essentials/<path>
+  pages:
+    - id: company
+      label: Company Overview
+      path: company
+      bundle: ui/pages/company.js
+      custom_element_name: pm-company-page
+      sidebar_group: pm-essentials
+      icon: Building2
+      order: 10
+
+    - id: projects
+      label: Projects
+      path: projects
+      bundle: ui/pages/projects.js
+      custom_element_name: pm-projects-page
+      sidebar_group: pm-essentials
+      icon: FolderKanban
+      order: 20
+
+    - id: kanban
+      label: Sprint Kanban
+      path: kanban
+      bundle: ui/pages/kanban.js
+      custom_element_name: pm-kanban-page
+      sidebar_group: pm-essentials
+      icon: Columns
+      order: 30
+
+    - id: reports
+      label: Reports
+      path: reports
+      bundle: ui/pages/reports.js
+      custom_element_name: pm-reports-page
+      sidebar_group: pm-essentials
+      icon: BarChart3
+      order: 40
+
+  # Sidebar group injected after native groups (order 10 = before system/admin)
+  sidebar_groups:
+    - id: pm-essentials
+      label: PM Essentials
+      order: 10
+      collapsible: true
+
+# Wave 2.1: writable data resources exposed via POST/PUT/DELETE.
+# Column allowlist is enforced at runtime — unlisted columns are rejected.
+# json_schema provides optional payload validation via jsonschema library.
+writable_data:
+  - id: projects
+    description: Create, update, and delete pm_essentials_projects rows.
+    table: pm_essentials_projects
+    allowed_columns:
+      - name
+      - status
+      - due_date
+    json_schema:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        status:
+          type: string
+          enum: [active, on_hold, completed]
+        due_date:
+          type: [string, "null"]
+      additionalProperties: false
+
+  - id: tasks
+    description: Update task status for kanban drag-and-drop (PUT only).
+    table: pm_essentials_tasks
+    allowed_columns:
+      - title
+      - status
+      - assignee
+      - priority
+      - project_id
+      - sprint_id
+    json_schema:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 500
+        status:
+          type: string
+          enum: [todo, in_progress, review, done, cancelled]
+        assignee:
+          type: [string, "null"]
+        priority:
+          type: string
+          enum: [urgent, high, medium, low]
+        project_id:
+          type: [integer, "null"]
+        sprint_id:
+          type: [integer, "null"]
+      additionalProperties: false
 
 # Claude Code hooks. Each entry maps an event (PreToolUse, PostToolUse,
 # Stop, SubagentStop) to a handler script under claude-hook-handlers/.
