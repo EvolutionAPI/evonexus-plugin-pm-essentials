@@ -1,0 +1,45 @@
+# PM Essentials — seed triggers
+#
+# Plugin capability: `triggers` (v1a extension).
+# Each entry becomes a row in the host `triggers` table with
+# `source_plugin = pm-essentials`. All seeded triggers ship with
+# `enabled: false` by default — the user must review and enable explicitly
+# before the trigger will fire.
+#
+# Field reference:
+#   slug                   stable identifier (auto-namespaced to
+#                          plugin-<slug>-<tr-slug>)
+#   name                   human-readable
+#   type                   webhook | event
+#   source                 webhook | scheduler | session | ...
+#   event_filter           optional — object with match keys
+#   action_type            skill | agent | webhook
+#   action_payload         object passed to the action
+#   agent                  optional — agent to route to (for action_type=agent)
+#   enabled                false by default — user enables after review
+
+triggers:
+  - slug: weekly-status-on-friday
+    name: Kick weekly status on Friday morning
+    type: event
+    source: scheduler
+    event_filter:
+      schedule: "0 9 * * 5"
+    action_type: skill
+    action_payload:
+      skill: plugin-pm-essentials-stakeholder-update
+      args: "leadership"
+    enabled: false
+
+  - slug: ticket-created-escalate-urgent
+    name: Ping PM Nova on urgent ticket creation
+    type: event
+    source: tickets
+    event_filter:
+      event: ticket.created
+      priority: urgent
+    action_type: agent
+    agent: pm-nova
+    action_payload:
+      prompt: "An urgent ticket just came in. Triage it and propose next step."
+    enabled: false

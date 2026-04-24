@@ -1,0 +1,56 @@
+# PM Essentials — seed goals
+#
+# Plugin capability: `goals` (v1a extension).
+# On install, the EvoNexus installer reads this file and inserts rows into
+# the host `projects` and `goals` tables, tagging each with
+# `source_plugin = pm-essentials`. Uninstall deletes the rows with a single
+# DELETE WHERE source_plugin = 'pm-essentials'.
+#
+# Slugs get auto-namespaced to `plugin-pm-essentials-<slug>` unless already
+# prefixed, so two plugins never fight for the same slug.
+#
+# Field reference:
+#   projects[].slug                 stable identifier (you reference it from goals[])
+#   projects[].title                shown in the dashboard goal tree
+#   projects[].description          optional
+#   projects[].mission_id           optional integer — null attaches to no mission
+#   projects[].status               active | on_hold | completed | archived
+#
+#   goals[].slug                    stable identifier
+#   goals[].project_slug            reference to a project above (or a pre-existing one)
+#   goals[].title
+#   goals[].metric_type             count | currency | percentage | boolean
+#   goals[].target_value            number
+#   goals[].current_value           optional, defaults to 0
+#   goals[].due_date                YYYY-MM-DD (optional)
+#   goals[].status                  active | achieved | on_hold | cancelled
+
+projects:
+  - slug: billing-v2
+    title: Billing v2
+    description: Revamp checkout and invoice flows
+    status: active
+
+  - slug: onboarding-redesign
+    title: Onboarding Redesign
+    description: Cut drop-off in first-run setup
+    status: active
+
+goals:
+  - slug: billing-10pct-rollout
+    project_slug: billing-v2
+    title: Ship v2 checkout to 10% of customers
+    metric_type: percentage
+    target_value: 10
+    current_value: 0
+    due_date: 2026-06-30
+    status: active
+
+  - slug: onboarding-dropoff-cut
+    project_slug: onboarding-redesign
+    title: Cut first-run drop-off by 30%
+    metric_type: percentage
+    target_value: 30
+    current_value: 0
+    due_date: 2026-05-15
+    status: active

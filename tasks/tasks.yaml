@@ -1,0 +1,37 @@
+# PM Essentials — seed tickets
+#
+# Plugin capability: `tasks` (v1a extension).
+# Each entry becomes a row in the host `tickets` table with
+# `source_plugin = pm-essentials`.
+#
+# Field reference:
+#   title                  shown in the tickets inbox
+#   description            markdown body
+#   priority               urgent | high | medium | low
+#   status                 open | in_progress | blocked | review | resolved | closed
+#   assignee_agent         bare agent name — auto-prefixed with plugin-<slug>- if
+#                          the file exists; otherwise used as-is (so native agents
+#                          work too)
+#   goal_slug              optional — link to a goal this plugin seeded
+
+tasks:
+  - title: Onboard yourself with PM Nova
+    description: |
+      Abra o chat do `pm-nova`, peça um status-check rápido e explore as 3
+      skills do plugin (`sprint-plan`, `project-health`, `stakeholder-update`).
+      Esta task foi criada pelo PM Essentials no momento da instalação —
+      ela some quando você desinstala o plugin.
+    priority: medium
+    status: open
+    assignee_agent: pm-nova
+    goal_slug: billing-10pct-rollout
+
+  - title: Review seed data and adjust priorities
+    description: |
+      O plugin criou 8 tasks de exemplo no banco (tabela
+      `pm_essentials_tasks`) e 2 projects + 2 goals (tabelas `projects` e
+      `goals`). Revise as prioridades e remova o que não serve para o seu
+      contexto.
+    priority: low
+    status: open
+    assignee_agent: pm-nova

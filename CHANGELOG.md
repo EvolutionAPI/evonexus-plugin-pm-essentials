@@ -2,6 +2,29 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.7] — 2026-04-24
+
+Three new capabilities from the v1a extension pass — **goals**, **tasks**,
+**triggers** — demonstrated end-to-end. On install the plugin now seeds
+2 projects, 2 goals, 2 tickets, and 2 triggers into the host tables,
+all tagged with `source_plugin: pm-essentials`. Uninstall deletes them
+with a single `DELETE WHERE source_plugin = ?`, leaving user-created
+rows untouched.
+
+### Added
+
+- **`goals/goals.yaml`** — declares `Billing v2` and `Onboarding Redesign`
+  projects plus two measurable goals tied to them.
+- **`tasks/tasks.yaml`** — two seed tickets assigned to `pm-nova`, linked
+  to the goals above. The plugin's agent auto-prefix kicks in so the
+  assignee resolves to `plugin-pm-essentials-pm-nova`.
+- **`triggers/triggers.yaml`** — two event triggers: a Friday cron that
+  fires the stakeholder-update skill, and a ticket.created handler that
+  pings PM Nova on urgent tickets. Both ship disabled — the user reviews
+  and enables before they fire.
+- **`capabilities:` list** declares `goals`, `tasks`, `triggers` so the
+  install preview warns about the host rows the plugin will create.
+
 ## [0.1.6] — 2026-04-24
 
 Plugin promoted to **reference implementation** of the EvoNexus v1a plugin

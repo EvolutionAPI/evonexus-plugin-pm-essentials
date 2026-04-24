@@ -19,6 +19,9 @@
 | **Heartbeat**         | `pm-essentials-daily-standup` — disabled by default                        |
 | **Routine**           | `pm-essentials-weekly-status` — Fri 09:00, disabled by default             |
 | **Claude Code hook**  | `Stop`-event handler                                                       |
+| **Seed goals**        | 2 projects (`Billing v2`, `Onboarding Redesign`) + 2 goals with targets    |
+| **Seed tasks**        | 2 tickets assigned to `pm-nova`, linked to the goals                       |
+| **Seed triggers**     | 2 event triggers (cron + ticket.created) shipped disabled — user enables   |
 
 ## Install
 
@@ -64,6 +67,12 @@ evonexus-plugin-pm-essentials/
 │   └── widgets/
 │       ├── pm-open-projects.js           # vanilla JS custom element
 │       └── pm-sprint-burndown.js
+├── goals/
+│   └── goals.yaml                        # seed projects + goals (DELETE WHERE source_plugin on uninstall)
+├── tasks/
+│   └── tasks.yaml                        # seed tickets, auto-assigned to plugin agent
+├── triggers/
+│   └── triggers.yaml                     # seed triggers, disabled by default
 └── docs/pm-essentials.md                 # end-user docs
 ```
 
