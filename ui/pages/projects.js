@@ -165,11 +165,23 @@ class PmProjectsPage extends HTMLElement {
 
   _formatDate(str) {
     if (!str) return "";
-    try { return new Date(str).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+    // Parse YYYY-MM-DD as a local date (new Date("2025-01-01") would be UTC
+    // and render in the prior day for negative timezones).
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(str);
+    if (!m) return str;
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    try { return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
     catch { return str; }
   }
 
-  _isOverdue(str) { return str && new Date(str) < new Date(); }
+  _isOverdue(str) {
+    if (!str) return false;
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(str);
+    if (!m) return false;
+    const due = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    return due < today;
+  }
 
   _statusBadge(s) {
     const cls = ["active", "on_hold", "completed"].includes(s) ? s : "";

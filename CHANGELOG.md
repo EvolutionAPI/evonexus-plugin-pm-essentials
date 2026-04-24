@@ -2,6 +2,42 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.3.1] — 2026-04-24
+
+### Fixed
+
+- **Projects page due-date timezone shift** — `_formatDate()` and `_isOverdue()`
+  now parse `YYYY-MM-DD` as a local date instead of handing the raw string to
+  `new Date()`, which interpreted it as UTC midnight and rendered the previous
+  day on negative-offset timezones (e.g. BRT showed `Jan 1` as `Dec 31`).
+
+## [0.3.0] — 2026-04-24
+
+First release to use **Wave 2.1 Custom pages** — PM Essentials now ships four
+full-screen plugin pages that exercise the complete plugin UI surface in
+EvoNexus.
+
+### Added
+
+- **Full-screen pages** at `/plugins-ui/pm-essentials/<page>`:
+  - `ui/pages/company.js` — Company configuration form.
+  - `ui/pages/projects.js` — Full CRUD for `pm_essentials_projects`.
+  - `ui/pages/kanban.js` — HTML5-native drag-and-drop sprint kanban.
+  - `ui/pages/reports.js` — Velocity bar chart + status breakdown via Canvas 2D.
+- **Sidebar group** "PM Essentials" (collapsible, order 10).
+- **New capabilities**:
+  - `ui_pages` — declares pages via `ui_entry_points.pages[]` and `sidebar_groups[]`.
+  - `writable_data` — CRUD endpoints with column allowlist and optional JSON Schema
+    validation (`pm_essentials_projects`, `pm_essentials_tasks`).
+- **New SQL tables**: `pm_essentials_company_config`, `pm_essentials_projects`,
+  `pm_essentials_sprints`, `pm_essentials_tasks`.
+
+### Requires
+
+EvoNexus core with Wave 2.1 schema support. Installs cleanly on older cores —
+`ui_pages` and `writable_data` are optional; pages simply won't appear until
+the core is updated.
+
 ## [0.2.0] — 2026-04-24
 
 First release to use **Wave 2.0 Plugin & Agent identity** — EvoNexus now
