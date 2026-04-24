@@ -2,6 +2,12 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.2] — 2026-04-24
+
+### Fixed
+
+- Widget `custom_element_name` now matches the `customElements.define()` call inside the bundle (`pm-open-projects`). Earlier version declared `pm-open-projects-widget` in the manifest which caused the host to append an element that was never registered, leaving the card empty.
+
 ## [0.1.1] — 2026-04-23
 
 ### Fixed
