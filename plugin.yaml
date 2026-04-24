@@ -1,6 +1,6 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.1.7
+version: 0.2.0
 description: >
   Reference plugin for EvoNexus — exercises every v1a capability so plugin
   authors can copy it as a starting template. Installs a PM-focused agent,
@@ -136,3 +136,14 @@ readonly_data:
         END
 
 source_url: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
+
+# Wave 2.0: Plugin & Agent identity (icon + avatar)
+# Assets served by /plugins/pm-essentials/ui/<path> endpoint.
+metadata:
+  icon: "ui/assets/icon.png"
+  icon_sha256: "dee97b2fb0a46d5c0304fdbde7e2b1e58f283bbed381601c56b6ffaedda974c3"
+
+agents:
+  - file: "agents/pm-nova.md"
+    avatar: "ui/assets/avatars/pm-nova.png"
+    avatar_sha256: "fd20ca765309e2856f86d3bd8cbdb6c6c079c96b8f6cf90088a694bb98b7af0f"

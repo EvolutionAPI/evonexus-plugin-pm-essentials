@@ -2,6 +2,33 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.2.0] — 2026-04-24
+
+First release to use **Wave 2.0 Plugin & Agent identity** — EvoNexus now
+renders plugin icon in the plugin card/detail, and PM Nova shows her own
+avatar in the agent chat and listing.
+
+### Added
+
+- **`ui/assets/icon.png`** — 128×128 PNG plugin icon (kanban-style flat
+  design, Evolution green `#00FFA7` on dark `#0d1117`). Served by the
+  existing `/plugins/pm-essentials/ui/<path>` endpoint.
+- **`ui/assets/avatars/pm-nova.png`** — 256×256 PNG avatar for PM Nova
+  agent. Injected into the frontend agent registry via `GET /api/agent-meta`
+  and rendered in chat bubbles and the `/agents` page.
+- **`metadata.icon`** and **`agents[].avatar`** fields in `plugin.yaml`,
+  both with `*_sha256` for tamper detection (verified by `plugin-health`).
+
+### Notes
+
+- Requires EvoNexus core with Wave 2.0 schema support (branch
+  `feature/plugins-v1`, merge pending). Installs cleanly on older cores
+  — `metadata` and `agents` are optional fields; the icon simply won't
+  appear until the core is updated.
+- Browser cache for assets is `max-age=3600 immutable`. After update from
+  v0.1.x the new icon appears within 1 hour, or immediately on hard refresh.
+
+
 ## [0.1.7] — 2026-04-24
 
 Three new capabilities from the v1a extension pass — **goals**, **tasks**,
