@@ -2,6 +2,15 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.5] — 2026-04-24
+
+### Fixed
+
+- **Conformance with native Claude Code / EvoNexus conventions** after auditing all 39 native agents, 200 native skills, and 41 native commands:
+  - Agent `description` now embeds `Examples:` with `<uses Agent tool to launch pm-nova>` lines, matching the native discovery format. Without examples the agent router had nothing to pattern-match against.
+  - Skill frontmatter dropped the invented `trigger:` and `context:` fields — no native skill uses them. Added `argument-hint:` which 56 native skills use for argument discovery. Skills are invoked by name, not by a declarative trigger string.
+  - Command file is now pure markdown without YAML frontmatter. 40/41 native commands ship without frontmatter; the `skill:` field in particular does not exist in the Claude Code command contract.
+
 ## [0.1.4] — 2026-04-24
 
 ### Changed

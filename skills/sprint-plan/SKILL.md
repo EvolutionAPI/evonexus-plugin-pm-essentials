@@ -1,8 +1,7 @@
 ---
 name: sprint-plan
-trigger: /sprint-plan
-description: Plan a sprint — break down a goal into tasks, estimate effort, assign owners
-context: fork
+description: Plan a sprint from the PM Essentials plugin — break down a sprint goal into 5-10 tasks, estimate effort (XS/S/M/L/XL), assign owners, and output a Markdown table. Use when the user says 'plan a sprint', 'sprint planning', or provides a sprint goal and wants it decomposed into tasks.
+argument-hint: "[optional sprint goal]"
 ---
 
 # Sprint Planning Skill

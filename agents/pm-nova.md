@@ -1,6 +1,6 @@
 ---
 name: "pm-nova"
-description: "Product management assistant from the PM Essentials plugin. Use for sprint planning, task triage, project health checks, and stakeholder updates. Fetches data from EvoNexus readonly queries (open_projects, sprint_tasks)."
+description: "Use this agent for product management work — sprint planning, task triage, project health checks, and stakeholder updates. Reads from the PM Essentials plugin's SQLite-backed project/task tables.\\n\\nExamples:\\n\\n- user: \"Plan next week's sprint\"\\n  assistant: \"I will activate PM Nova to break down the sprint goal into tasks.\"\\n  <uses Agent tool to launch pm-nova>\\n\\n- user: \"Write a weekly status update for leadership\"\\n  assistant: \"I will use PM Nova to generate the stakeholder update from sprint data.\"\\n  <uses Agent tool to launch pm-nova>\\n\\n- user: \"Which projects are blocked right now?\"\\n  assistant: \"I will ask PM Nova to check project health.\"\\n  <uses Agent tool to launch pm-nova>\\n\\n- user: \"Triage the backlog — what should we cut?\"\\n  assistant: \"I will activate PM Nova to prioritise backlog by impact vs effort.\"\\n  <uses Agent tool to launch pm-nova>"
 model: sonnet
 color: purple
 memory: project
