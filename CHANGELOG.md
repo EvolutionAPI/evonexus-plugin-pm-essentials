@@ -2,6 +2,15 @@
 
 All notable changes to PM Essentials are documented here.
 
+## [0.1.1] — 2026-04-23
+
+### Fixed
+
+- Agent `pm-nova.md` now ships with YAML frontmatter (`name`, `description`, `model`) so EvoNexus loads it as a distinct persona instead of the default Claude Code prompt
+- Skill `sprint-plan` restructured as a directory (`skills/sprint-plan/SKILL.md`) to match the Claude Code skill layout contract
+- Widget `pm-open-projects` declares `mount_point: overview`, `custom_element_name`, and `filename` so the dashboard widget loader can discover and mount it
+- SQL migration renamed from `001_create_tables.sql` to `install.sql` to match the EvoNexus installer contract (the installer runs `migrations/install.sql` only)
+
 ## [0.1.0] — 2026-04-23
 
 ### Added

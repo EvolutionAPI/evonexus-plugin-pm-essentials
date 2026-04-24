@@ -1,6 +1,6 @@
 id: pm-essentials
 name: PM Essentials
-version: 0.1.0
+version: 0.1.1
 description: >
   Project management essentials for EvoNexus — adds a Nova-style PM agent,
   sprint planning skill, open-projects widget, and read-only SQL queries for
@@ -33,7 +33,9 @@ ui_entry_points:
   widgets:
     - id: pm-open-projects
       label: Open Projects
-      route: ui/widgets/pm-open-projects.js
+      mount_point: overview
+      custom_element_name: pm-open-projects-widget
+      filename: pm-open-projects.js
       icon: null
 
 claude_hooks:
