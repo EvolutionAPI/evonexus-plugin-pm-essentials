@@ -1,0 +1,16 @@
+heartbeats:
+  - id: pm-essentials-daily-standup
+    agent: pm-nova
+    interval_seconds: 86400        # every 24h
+    max_turns: 6
+    timeout_seconds: 300
+    lock_timeout_seconds: 1800
+    wake_triggers: [interval, manual]
+    enabled: false                 # opt-in — enable after testing
+    goal_id: null
+    required_secrets: []
+    decision_prompt: |
+      Check open projects and the active sprint for the workspace.
+      If any tasks are overdue by more than 2 days or the sprint ends
+      within 3 days with uncompleted tasks, surface a summary.
+      Otherwise skip (respond with SKIP).

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "pm-essentials",
+    "name": "PM Essentials",
+    "version": "0.1.0",
+    "description": "Project management essentials — PM Nova agent, sprint planning skill, open-projects widget, and read-only SQL queries for project and task data.",
+    "author": "Evolution Foundation",
+    "license": "MIT",
+    "homepage": "https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials",
+    "repo_url": "https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials",
+    "verified": true,
+    "tier": "essential",
+    "tags": ["project-management", "sprint", "tasks", "widgets"]
+  }
+]

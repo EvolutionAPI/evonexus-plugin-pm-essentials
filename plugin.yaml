@@ -1,0 +1,82 @@
+id: pm-essentials
+name: PM Essentials
+version: 0.1.0
+description: >
+  Project management essentials for EvoNexus — adds a Nova-style PM agent,
+  sprint planning skill, open-projects widget, and read-only SQL queries for
+  project and task data.
+author: Evolution Foundation
+license: MIT
+homepage: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
+
+min_evonexus_version: 0.30.0
+tier: essential
+
+capabilities:
+  - agents
+  - skills
+  - rules
+  - heartbeats
+  - sql_migrations
+  - widgets
+  - claude_hooks
+  - readonly_data
+
+env_vars_needed: []
+  # No external API keys required for the base feature set.
+
+conflicts: {}
+
+dependencies: {}
+
+ui_entry_points:
+  widgets:
+    - id: pm-open-projects
+      label: Open Projects
+      route: ui/widgets/pm-open-projects.js
+      icon: null
+
+claude_hooks:
+  - event: Stop
+    handler_path: claude-hook-handlers/on_stop.py
+
+readonly_data:
+  - id: open_projects
+    description: Returns all active projects with task counts.
+    sql: >
+      SELECT
+        pm_essentials_projects.id,
+        pm_essentials_projects.name,
+        pm_essentials_projects.status,
+        pm_essentials_projects.due_date,
+        COUNT(pm_essentials_tasks.id) AS task_count
+      FROM pm_essentials_projects
+      LEFT JOIN pm_essentials_tasks
+        ON pm_essentials_tasks.project_id = pm_essentials_projects.id
+      WHERE pm_essentials_projects.status = 'active'
+      GROUP BY pm_essentials_projects.id
+      ORDER BY pm_essentials_projects.due_date ASC
+
+  - id: sprint_tasks
+    description: Returns all tasks in the current sprint.
+    sql: >
+      SELECT
+        pm_essentials_tasks.id,
+        pm_essentials_tasks.title,
+        pm_essentials_tasks.status,
+        pm_essentials_tasks.assignee,
+        pm_essentials_tasks.priority,
+        pm_essentials_projects.name AS project_name
+      FROM pm_essentials_tasks
+      JOIN pm_essentials_projects
+        ON pm_essentials_projects.id = pm_essentials_tasks.project_id
+      WHERE pm_essentials_tasks.sprint_id IS NOT NULL
+        AND pm_essentials_tasks.sprint_id = (
+          SELECT id FROM pm_essentials_sprints
+          WHERE status = 'active'
+          ORDER BY started_at DESC
+          LIMIT 1
+        )
+      ORDER BY pm_essentials_tasks.priority DESC, pm_essentials_tasks.created_at ASC
+
+source_url: https://github.com/EvolutionAPI/evonexus-plugin-pm-essentials
